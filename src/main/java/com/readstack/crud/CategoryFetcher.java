@@ -1,5 +1,7 @@
 package com.readstack.crud;
 
+import com.readstack.dto.CategoryGetDto;
+import com.readstack.validation.exception.CategoryNotFoundException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;

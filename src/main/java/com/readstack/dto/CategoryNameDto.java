@@ -1,4 +1,4 @@
-package com.readstack.crud;
+package com.readstack.dto;
 
 public record CategoryNameDto(
         Long id,

@@ -1,4 +1,4 @@
-package com.readstack.crud;
+package com.readstack.dto;
 
 public record DiscoveryGetDto(
         Long id,

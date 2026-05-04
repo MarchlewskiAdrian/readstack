@@ -1,9 +1,10 @@
 package com.readstack.controller;
 
-import com.readstack.crud.DiscoveryAddDto;
-import com.readstack.crud.DiscoveryGetDto;
+import com.readstack.dto.DiscoveryAddDto;
+import com.readstack.dto.DiscoveryGetDto;
 import com.readstack.crud.Facade;
 import com.readstack.crud.PageResponse;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -54,9 +55,9 @@ class DiscoveryController {
         return facade.getDiscoveryById(discoveryId);
     }
 
-    //location: http://localhost:8080/discoveries/101?title=string&url=string&description=string&categoryId=1 
+    //location: http://localhost:8080/discoveries/101?title=string&url=string&description=string&categoryId=1
     @PostMapping("/discoveries")
-    ResponseEntity<DiscoveryGetDto> add(DiscoveryAddDto body) {
+    ResponseEntity<DiscoveryGetDto> add(@Valid @RequestBody DiscoveryAddDto body) {
         DiscoveryGetDto addedDiscovery = facade.addDiscovery(body);
 
         URI uri = ServletUriComponentsBuilder
@@ -72,13 +73,15 @@ class DiscoveryController {
     @PutMapping("/discoveries/{discoveryId}")
     DiscoveryGetDto update(
             @PathVariable Long discoveryId,
-            @RequestBody DiscoveryAddDto body
+            @Valid @RequestBody DiscoveryAddDto body
     ) {
         return facade.updateDiscoveryById(discoveryId, body);
     }
 
     @DeleteMapping("/discoveries/{discoveryId}")
-    void deleteById(@PathVariable Long discoveryId) {
+    ResponseEntity<Void> deleteById(@PathVariable Long discoveryId) {
         facade.deleteDiscoveryById(discoveryId);
+
+        return ResponseEntity.noContent().build();
     }
 }

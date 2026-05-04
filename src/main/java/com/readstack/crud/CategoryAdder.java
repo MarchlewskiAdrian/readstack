@@ -1,5 +1,8 @@
 package com.readstack.crud;
 
+import com.readstack.dto.CategoryAddDto;
+import com.readstack.dto.CategoryGetDto;
+import com.readstack.validation.exception.CategoryExistsException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +16,7 @@ class CategoryAdder {
 
     public CategoryGetDto add(CategoryAddDto dto) {
         if(categoryRepository.existsByNameIgnoreCase(dto.name())){
-            throw new CategoryWithTitleAlreadyExistsException(dto.name());
+            throw new CategoryExistsException(dto.name());
         }
 
         Category category = CategoryMapper.mapAddDtoToEntity(dto);

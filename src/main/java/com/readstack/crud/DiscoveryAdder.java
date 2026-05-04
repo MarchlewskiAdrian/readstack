@@ -1,5 +1,9 @@
 package com.readstack.crud;
 
+import com.readstack.dto.CategoryNameDto;
+import com.readstack.dto.DiscoveryAddDto;
+import com.readstack.dto.DiscoveryGetDto;
+import com.readstack.validation.exception.DiscoveryExistsException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,7 +18,7 @@ class DiscoveryAdder {
 
     public DiscoveryGetDto add(DiscoveryAddDto dto) {
         if (discoveryRepository.existsByTitleIgnoreCase(dto.title())) {
-            throw new DiscoveryWithTitleAlreadyExistsException(dto.title());
+            throw new DiscoveryExistsException(dto.title());
         }
 
 

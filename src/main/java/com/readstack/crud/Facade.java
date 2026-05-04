@@ -1,10 +1,12 @@
 package com.readstack.crud;
 
+import com.readstack.dto.CategoryAddDto;
+import com.readstack.dto.CategoryGetDto;
+import com.readstack.dto.DiscoveryAddDto;
+import com.readstack.dto.DiscoveryGetDto;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import org.antlr.v4.runtime.misc.MurmurHash;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,8 +14,8 @@ import org.springframework.stereotype.Service;
 public class Facade {
     private final DiscoveryFetcher discoveryFetcher;
     private final DiscoveryAdder discoveryAdder;
-    private DiscoveryUpdater discoveryUpdater;
-    private DiscoveryDeleter discoveryDeleter;
+    private final DiscoveryUpdater discoveryUpdater;
+    private final DiscoveryDeleter discoveryDeleter;
 
     private final CategoryFetcher categoryFetcher;
     private final CategoryUpdater categoryUpdater;

@@ -1,8 +1,8 @@
 package com.readstack.crud;
 
+import com.readstack.validation.exception.CategoryContainsDiscoveriesException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

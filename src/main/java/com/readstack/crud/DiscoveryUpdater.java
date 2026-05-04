@@ -1,5 +1,8 @@
 package com.readstack.crud;
 
+import com.readstack.dto.CategoryNameDto;
+import com.readstack.dto.DiscoveryAddDto;
+import com.readstack.dto.DiscoveryGetDto;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

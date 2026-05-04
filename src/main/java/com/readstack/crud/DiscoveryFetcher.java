@@ -1,5 +1,8 @@
 package com.readstack.crud;
 
+import com.readstack.dto.CategoryNameDto;
+import com.readstack.dto.DiscoveryGetDto;
+import com.readstack.validation.exception.DiscoveryNotFoundException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;

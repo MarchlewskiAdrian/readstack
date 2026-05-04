@@ -1,9 +1,10 @@
 package com.readstack.controller;
 
-import com.readstack.crud.CategoryAddDto;
-import com.readstack.crud.CategoryGetDto;
+import com.readstack.dto.CategoryAddDto;
+import com.readstack.dto.CategoryGetDto;
 import com.readstack.crud.Facade;
 import com.readstack.crud.PageResponse;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -41,13 +42,13 @@ class CategoryController {
     @PutMapping("/{categoryId}")
     public CategoryGetDto updateById(
             @PathVariable Long categoryId,
-            @RequestBody CategoryAddDto body
+            @Valid @RequestBody CategoryAddDto body
     ) {
         return facade.updateCategoryById(categoryId, body);
     }
 
     @PostMapping
-    public ResponseEntity<CategoryGetDto> add(@RequestBody CategoryAddDto body) {
+    public ResponseEntity<CategoryGetDto> add(@Valid @RequestBody CategoryAddDto body) {
         CategoryGetDto addedCategory = facade.addCategory(body);
 
         URI uri = ServletUriComponentsBuilder

@@ -1,5 +1,9 @@
 package com.readstack.crud;
 
+import com.readstack.dto.CategoryAddDto;
+import com.readstack.dto.CategoryGetDto;
+import com.readstack.dto.CategoryNameDto;
+
 class CategoryMapper {
     public static CategoryGetDto mapEntityToGetDto(Category category) {
         return new CategoryGetDto(

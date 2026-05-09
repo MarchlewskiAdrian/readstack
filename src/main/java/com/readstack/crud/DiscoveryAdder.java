@@ -3,7 +3,6 @@ package com.readstack.crud;
 import com.readstack.dto.CategoryNameDto;
 import com.readstack.dto.DiscoveryAddDto;
 import com.readstack.dto.DiscoveryGetDto;
-import com.readstack.validation.exception.DiscoveryExistsException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,12 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 class DiscoveryAdder {
     private final DiscoveryRepository discoveryRepository;
     private final CategoryFetcher categoryFetcher;
+    private final DiscoveryValidator discoveryValidator;
 
     public DiscoveryGetDto add(DiscoveryAddDto dto) {
-        if (discoveryRepository.existsByTitleIgnoreCase(dto.title())) {
-            throw new DiscoveryExistsException(dto.title());
-        }
-
+        discoveryValidator.validateForAdd(dto);
 
         Category category = categoryFetcher.getEntityById(dto.categoryId());
         Discovery discoveryToAdd = DiscoveryMapper.mapAddDtoToEntity(dto, category);

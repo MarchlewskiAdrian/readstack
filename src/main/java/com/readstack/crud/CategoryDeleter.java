@@ -1,6 +1,7 @@
 package com.readstack.crud;
 
 import com.readstack.validation.exception.CategoryContainsDiscoveriesException;
+import com.readstack.validation.exception.CategoryNotFoundException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ class CategoryDeleter {
     public void deleteById(Long id) {
         if (containsDiscoveries(id)) {
             throw new CategoryContainsDiscoveriesException(id);
+        }
+        if (!categoryRepository.existsById(id)) {
+            throw new CategoryNotFoundException(id);
         }
         categoryRepository.deleteById(id);
     }

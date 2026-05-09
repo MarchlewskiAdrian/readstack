@@ -3,13 +3,15 @@ package com.readstack.crud;
 import com.readstack.dto.CategoryGetDto;
 import com.readstack.validation.exception.CategoryNotFoundException;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@Transactional(readOnly = true)
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 class CategoryFetcher {
     private final CategoryRepository categoryRepository;
 

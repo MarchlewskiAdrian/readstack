@@ -1,12 +1,11 @@
 package com.readstack.controller;
 
+import com.readstack.crud.DiscoveryFacade;
+import com.readstack.crud.PageResponse;
 import com.readstack.dto.DiscoveryAddDto;
 import com.readstack.dto.DiscoveryGetDto;
-import com.readstack.crud.Facade;
-import com.readstack.crud.PageResponse;
 import jakarta.validation.Valid;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -17,12 +16,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@RequestMapping("/discoveries")
+@RequiredArgsConstructor
 class DiscoveryController {
-    private final Facade facade;
+    private final DiscoveryFacade discoveryFacade;
 
-
-    @GetMapping("/discoveries")
+    @GetMapping
     PageResponse<DiscoveryGetDto> getAll(
             @RequestParam(required = false) String title,
             @RequestParam(required = false, defaultValue = "0") Integer page,
@@ -32,33 +31,30 @@ class DiscoveryController {
 
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, field));
-
-        return facade.getAllDiscoveries(title, pageable);
+        return discoveryFacade.getAll(title, pageable);
     }
 
-    @GetMapping("/categories/{categoryId}/discoveries")
-    PageResponse<DiscoveryGetDto> getAllByCategory
-            (@PathVariable Long categoryId,
-             @RequestParam(required = false, defaultValue = "0") Integer page,
-             @RequestParam(required = false, defaultValue = "20") Integer size,
-             @RequestParam(required = false, defaultValue = "id") String field,
-             @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction
-            ) {
+    @GetMapping("/categories/{categoryId}")
+    PageResponse<DiscoveryGetDto> getAllByCategoryId(
+            @PathVariable Long categoryId,
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "20") Integer size,
+            @RequestParam(required = false, defaultValue = "id") String field,
+            @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction
+    ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, field));
-
-        return facade.getAllDiscoveriesByCategoryId(categoryId, pageable);
-
+        return discoveryFacade.getAllByCategoryId(categoryId, pageable);
     }
 
-    @GetMapping("/discoveries/{discoveryId}")
+    @GetMapping("/{discoveryId}")
     DiscoveryGetDto getById(@PathVariable Long discoveryId) {
-        return facade.getDiscoveryById(discoveryId);
+        return discoveryFacade.getById(discoveryId);
     }
 
     //location: http://localhost:8080/discoveries/101?title=string&url=string&description=string&categoryId=1
-    @PostMapping("/discoveries")
+    @PostMapping
     ResponseEntity<DiscoveryGetDto> add(@Valid @RequestBody DiscoveryAddDto body) {
-        DiscoveryGetDto addedDiscovery = facade.addDiscovery(body);
+        DiscoveryGetDto addedDiscovery = discoveryFacade.add(body);
 
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -70,17 +66,17 @@ class DiscoveryController {
                 .body(addedDiscovery);
     }
 
-    @PutMapping("/discoveries/{discoveryId}")
+    @PutMapping("/{discoveryId}")
     DiscoveryGetDto update(
             @PathVariable Long discoveryId,
             @Valid @RequestBody DiscoveryAddDto body
     ) {
-        return facade.updateDiscoveryById(discoveryId, body);
+        return discoveryFacade.updateById(discoveryId, body);
     }
 
-    @DeleteMapping("/discoveries/{discoveryId}")
+    @DeleteMapping("/{discoveryId}")
     ResponseEntity<Void> deleteById(@PathVariable Long discoveryId) {
-        facade.deleteDiscoveryById(discoveryId);
+        discoveryFacade.deleteById(discoveryId);
 
         return ResponseEntity.noContent().build();
     }

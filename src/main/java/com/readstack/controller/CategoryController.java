@@ -1,12 +1,11 @@
 package com.readstack.controller;
 
+import com.readstack.crud.CategoryFacade;
+import com.readstack.crud.PageResponse;
 import com.readstack.dto.CategoryAddDto;
 import com.readstack.dto.CategoryGetDto;
-import com.readstack.crud.Facade;
-import com.readstack.crud.PageResponse;
 import jakarta.validation.Valid;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -17,11 +16,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@RequiredArgsConstructor
 @RequestMapping("/categories")
 class CategoryController {
-    private final Facade facade;
-
+    private final CategoryFacade categoryFacade;
 
     @GetMapping
     public PageResponse<CategoryGetDto> getAll(
@@ -31,12 +29,12 @@ class CategoryController {
             @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, field));
-        return facade.getAllCategories(pageable);
+        return categoryFacade.getAll(pageable);
     }
 
     @GetMapping("/{categoryId}")
     public CategoryGetDto getById(@PathVariable Long categoryId) {
-        return facade.getCategoryById(categoryId);
+        return categoryFacade.getById(categoryId);
     }
 
     @PutMapping("/{categoryId}")
@@ -44,12 +42,12 @@ class CategoryController {
             @PathVariable Long categoryId,
             @Valid @RequestBody CategoryAddDto body
     ) {
-        return facade.updateCategoryById(categoryId, body);
+        return categoryFacade.updateById(categoryId, body);
     }
 
     @PostMapping
     public ResponseEntity<CategoryGetDto> add(@Valid @RequestBody CategoryAddDto body) {
-        CategoryGetDto addedCategory = facade.addCategory(body);
+        CategoryGetDto addedCategory = categoryFacade.add(body);
 
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -59,12 +57,14 @@ class CategoryController {
 
         return ResponseEntity.created(uri)
                 .body(addedCategory);
-
     }
 
     @DeleteMapping("/{categoryId}")
-    public void deleteById(@PathVariable Long categoryId) {
-        facade.deleteCategoryById(categoryId);
+    public ResponseEntity<Void> deleteById(@PathVariable Long categoryId) {
+        categoryFacade.deleteById(categoryId);
+
+        return ResponseEntity.noContent()
+                .build();
     }
 }
 

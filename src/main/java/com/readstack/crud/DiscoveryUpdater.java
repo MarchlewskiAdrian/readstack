@@ -16,8 +16,12 @@ class DiscoveryUpdater {
     private final DiscoveryFetcher discoveryFetcher;
     private final DiscoveryRepository discoveryRepository;
     private final CategoryFetcher categoryFetcher;
+    private final DiscoveryValidator discoveryValidator;
 
     public DiscoveryGetDto updateById(Long id, DiscoveryAddDto dto) {
+
+        discoveryValidator.validateForUpdate(id, dto);
+
         Discovery discovery = discoveryFetcher.getEntityById(id);
         Category category = categoryFetcher.getEntityById(dto.categoryId());
         CategoryNameDto categoryNameDto = CategoryMapper.mapEntityToNameDto(category);

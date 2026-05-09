@@ -15,14 +15,19 @@ interface DiscoveryRepository extends JpaRepository<Discovery, Long> {
             """)
     Page<Discovery> findAll(String title, Pageable pageable);
 
+    boolean existsByTitleIgnoreCaseAndIdNot(String title, Long id);
+
     boolean existsByTitleIgnoreCase(String title);
 
     boolean existsByCategory_Id(Long categoryId);
 
     @EntityGraph(attributePaths = "category")
     Page<Discovery> findAllByCategory_Id(Long categoryId, Pageable pageable);
-    
-    
+
+
+    boolean existsByUrlIgnoreCase(String url);
+
+    boolean existsByUrlIgnoreCaseAndIdNot(String url, Long id);
 }
 
 

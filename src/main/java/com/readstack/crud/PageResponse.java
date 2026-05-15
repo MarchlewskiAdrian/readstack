@@ -1,9 +1,5 @@
 package com.readstack.crud;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-
 import java.util.List;
 
 public record PageResponse<T>(

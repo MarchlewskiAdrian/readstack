@@ -1,16 +1,6 @@
-CREATE TABLE IF NOT EXISTS category
-(
-    id          BIGINT PRIMARY KEY AUTO_INCREMENT,
-    name        VARCHAR(50) NOT NULL UNIQUE,
-    description VARCHAR(500) NOT NULL,
-    uuid        UUID        NOT NULL UNIQUE,
-    created_on  TIMESTAMP,
-    version     BIGINT
-);
-
 CREATE TABLE IF NOT EXISTS discovery
 (
-    id          BIGINT PRIMARY KEY AUTO_INCREMENT,
+    id          BIGSERIAL PRIMARY KEY,
     title       VARCHAR(80)  NOT NULL UNIQUE,
     url         VARCHAR(500) NOT NULL UNIQUE,
     description VARCHAR(500) NOT NULL,

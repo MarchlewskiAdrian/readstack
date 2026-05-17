@@ -8,14 +8,14 @@ import org.springframework.data.jpa.repository.Query;
 
 interface DiscoveryRepository extends JpaRepository<Discovery, Long> {
 
+    boolean existsByTitleIgnoreCaseAndIdNot(String title, Long id);
+
     @EntityGraph(attributePaths = "category")
     @Query("""
             SELECT d FROM Discovery d
-            WHERE (:title IS NULL OR LOWER(d.title) LIKE LOWER(CONCAT('%', :title, '%')))
+            WHERE (LOWER(d.title) LIKE LOWER(CONCAT('%', :title, '%')) OR :title IS NULL)
             """)
-    Page<Discovery> findAll(String title, Pageable pageable);
-
-    boolean existsByTitleIgnoreCaseAndIdNot(String title, Long id);
+    Page<Discovery> findAllWitOptionalTitleField(String title, Pageable pageable);
 
     boolean existsByTitleIgnoreCase(String title);
 
@@ -23,7 +23,6 @@ interface DiscoveryRepository extends JpaRepository<Discovery, Long> {
 
     @EntityGraph(attributePaths = "category")
     Page<Discovery> findAllByCategory_Id(Long categoryId, Pageable pageable);
-
 
     boolean existsByUrlIgnoreCase(String url);
 

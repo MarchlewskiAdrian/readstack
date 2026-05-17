@@ -17,7 +17,7 @@ class DiscoveryFetcher {
     private final DiscoveryRepository discoveryRepository;
 
     public PageResponse<DiscoveryGetDto> getAll(String title, Pageable pageable) {
-        Page<DiscoveryGetDto> page = discoveryRepository.findAll(title, pageable)
+        Page<DiscoveryGetDto> page = discoveryRepository.findAllWitOptionalTitleField(title, pageable)
                 .map(this::toGetDto);
 
         return toPageResponse(page);

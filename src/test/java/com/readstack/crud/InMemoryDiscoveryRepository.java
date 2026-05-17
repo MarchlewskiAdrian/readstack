@@ -26,7 +26,7 @@ class InMemoryDiscoveryRepository implements DiscoveryRepository {
     }
 
     @Override
-    public Page<Discovery> findAll(String title, Pageable pageable) {
+    public Page<Discovery> findAllWitOptionalTitleField(String title, Pageable pageable) {
         List<Discovery> all = db
                 .values()
                 .stream()

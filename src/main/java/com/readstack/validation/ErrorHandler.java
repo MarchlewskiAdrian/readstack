@@ -1,8 +1,8 @@
 package com.readstack.validation;
 
 import com.readstack.validation.exception.ApiException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,10 +14,21 @@ import java.util.List;
 @RestControllerAdvice
 public class ErrorHandler {
 
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException(Exception e){
+        return ResponseEntity
+                .status(ErrorCode.VALIDATION_ERROR.getStatus())
+                .body(new ErrorResponse(
+                        ErrorCode.VALIDATION_ERROR.getCode(),
+                        "Bad Credentials",
+                        null,
+                        Instant.now()));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
         return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .status(ErrorCode.SERVER_ERROR.getStatus())
                 .body(new ErrorResponse(
                         ErrorCode.SERVER_ERROR.getCode(),
                         "Unexpected error",

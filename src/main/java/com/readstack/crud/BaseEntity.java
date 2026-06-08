@@ -12,13 +12,16 @@ import java.util.UUID;
 @Getter
 @Setter
 @MappedSuperclass
-abstract class BaseEntity {
+public abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private UUID uuid = UUID.randomUUID();
+
     @CreationTimestamp
     private Instant createdOn;
+
     @Version
     private Long version;
 

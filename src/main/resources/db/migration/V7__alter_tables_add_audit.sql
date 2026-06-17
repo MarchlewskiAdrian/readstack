@@ -1,0 +1,48 @@
+ALTER TABLE discovery
+    ADD created TIMESTAMP WITHOUT TIME ZONE;
+
+ALTER TABLE discovery
+    ADD creator BIGINT;
+
+ALTER TABLE discovery
+    ADD updated TIMESTAMP WITHOUT TIME ZONE;
+
+ALTER TABLE discovery
+    ADD updater BIGINT;
+
+
+ALTER TABLE category
+    ADD created TIMESTAMP WITHOUT TIME ZONE;
+
+ALTER TABLE category
+    ADD creator BIGINT;
+
+ALTER TABLE category
+    ADD updated TIMESTAMP WITHOUT TIME ZONE;
+
+ALTER TABLE category
+    ADD updater BIGINT;
+
+ALTER TABLE users
+    ADD created TIMESTAMP WITHOUT TIME ZONE;
+
+ALTER TABLE users
+    ADD creator BIGINT;
+
+ALTER TABLE users
+    ADD updated TIMESTAMP WITHOUT TIME ZONE;
+
+ALTER TABLE users
+    ADD updater BIGINT;
+
+ALTER TABLE category
+    ALTER COLUMN description TYPE VARCHAR(255) USING (description::VARCHAR(255));
+
+ALTER TABLE users
+    ALTER COLUMN email TYPE VARCHAR(255) USING (email::VARCHAR(255));
+
+ALTER TABLE category
+    ALTER COLUMN name TYPE VARCHAR(255) USING (name::VARCHAR(255));
+
+ALTER TABLE users
+    ALTER COLUMN username TYPE VARCHAR(255) USING (username::VARCHAR(255));

@@ -12,7 +12,8 @@ class DiscoveryMapper {
                 discovery.getTitle(),
                 discovery.getUrl(),
                 discovery.getDescription(),
-                categoryNameDto
+                categoryNameDto,
+                discovery.getAudit()
         );
     }
 

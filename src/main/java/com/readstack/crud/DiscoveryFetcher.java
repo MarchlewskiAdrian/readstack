@@ -49,7 +49,7 @@ class DiscoveryFetcher {
         return DiscoveryMapper.mapEntityToGetDto(discovery, categoryNameDto);
     }
 
-    private PageResponse<DiscoveryGetDto> toPageResponse(Page<DiscoveryGetDto> page) {
+    private PageResponse<DiscoveryGetDto> toPageResponse(Page<DiscoveryGetDto> page) { //TODO: Util method
         return new PageResponse<>(
                 page.getContent(),
                 page.getNumber(),

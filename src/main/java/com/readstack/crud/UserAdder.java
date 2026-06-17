@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class UserAdder {
-    private static final String DEFAULT_ROLE = Role.ROLE_USER.name();
+    private static final String DEFAULT_ROLE = Role.ROLE_ADMIN.name();
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;

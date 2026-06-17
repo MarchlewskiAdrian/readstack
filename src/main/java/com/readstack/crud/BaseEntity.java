@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -12,6 +13,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,8 +21,11 @@ public abstract class BaseEntity {
 
     private UUID uuid = UUID.randomUUID();
 
+    @Embedded
+    private Audit audit = new Audit();
+
     @CreationTimestamp
-    private Instant createdOn;
+    private Instant createdOn; //TODO: Moved to Audit class
 
     @Version
     private Long version;
@@ -39,3 +44,5 @@ public abstract class BaseEntity {
         return Objects.hash(id, uuid, createdOn, version);
     }
 }
+
+

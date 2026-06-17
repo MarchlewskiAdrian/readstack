@@ -1,5 +1,6 @@
 package com.readstack.user_crud;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+@Getter
 @RequiredArgsConstructor
 public class SecurityUser implements UserDetails {
     private final User user;
@@ -30,7 +32,8 @@ public class SecurityUser implements UserDetails {
         return user.getUsername();
     }
 
-    public List<String> getRoles(){
+    public List<String> getRoles() {
         return user.getAuthorities().stream().toList();
     }
+
 }

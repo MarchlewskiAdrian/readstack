@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
     CATEGORY_NOT_FOUND(40401, HttpStatus.NOT_FOUND),
     DISCOVERY_NOT_FOUND(40402, HttpStatus.NOT_FOUND),
+    USER_NOT_FOUND(40403, HttpStatus.NOT_FOUND),
     DISCOVERY_EXISTS(40901, HttpStatus.CONFLICT),
     CATEGORY_EXISTS(40902, HttpStatus.CONFLICT),
     CATEGORY_NOT_EMPTY(40903, HttpStatus.CONFLICT),

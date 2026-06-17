@@ -20,7 +20,7 @@ class CategoryUpdater {
         category.setName(body.name());
         category.setDescription(body.description());
 
-        Category savedCategory = categoryRepository.save(category);
+        Category savedCategory = categoryRepository.save(category); //TODO: category == savedCategory, use dirty checking
         return CategoryMapper.mapEntityToGetDto(savedCategory);
     }
 

@@ -29,6 +29,7 @@ public class User extends BaseEntity {
     private String password;
 
     private boolean enabled = true;
+
     private Collection<String> authorities = new HashSet<>(); //Or user_role table?
 
     public void addRole(String role){

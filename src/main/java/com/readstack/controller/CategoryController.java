@@ -1,6 +1,6 @@
 package com.readstack.controller;
 
-import com.readstack.crud.CategoryFacade;
+import com.readstack.crud.category.CategoryFacade;
 import com.readstack.crud.PageResponse;
 import com.readstack.dto.CategoryAddDto;
 import com.readstack.dto.CategoryGetDto;

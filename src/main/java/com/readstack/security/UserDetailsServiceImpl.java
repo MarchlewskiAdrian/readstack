@@ -1,7 +1,6 @@
 package com.readstack.security;
 
-import com.readstack.user_crud.SecurityUser;
-import com.readstack.user_crud.UserRepository;
+import com.readstack.crud.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

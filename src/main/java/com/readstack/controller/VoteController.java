@@ -1,10 +1,10 @@
 package com.readstack.controller;
 
 import com.readstack.crud.PageResponse;
-import com.readstack.crud.VoteFacade;
+import com.readstack.crud.vote.VoteFacade;
 import com.readstack.dto.VoteAddDto;
 import com.readstack.dto.VoteGetDto;
-import com.readstack.user_crud.SecurityUser;
+import com.readstack.security.SecurityUser;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

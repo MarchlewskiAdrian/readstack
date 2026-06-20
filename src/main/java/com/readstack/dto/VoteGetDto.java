@@ -1,7 +1,7 @@
 package com.readstack.dto;
 
 import com.readstack.crud.Audit;
-import com.readstack.crud.VoteType;
+import com.readstack.crud.vote.VoteType;
 
 public record VoteGetDto(
         Long id,

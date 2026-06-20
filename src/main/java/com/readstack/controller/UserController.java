@@ -1,15 +1,16 @@
 package com.readstack.controller;
 
-import com.readstack.crud.UserFacade;
-import com.readstack.user_crud.UserAddDto;
-import com.readstack.user_crud.UserGetDto;
+import com.readstack.crud.PageResponse;
+import com.readstack.crud.user.UserFacade;
+import com.readstack.dto.UserAddDto;
+import com.readstack.dto.UserGetDto;
+import com.readstack.dto.UserUpdateDto;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -33,6 +34,32 @@ class UserController {
         return ResponseEntity.created(uri)
                 .body(addedUser);
 
+    }
+    @GetMapping
+    PageResponse<UserGetDto> getAll(
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "20") Integer size
+    ){
+        Pageable pageable = PageRequest.of(page, size);
+        return userFacade.getAll(pageable);
+    }
+
+    @GetMapping("/{userId}")
+    public UserGetDto getById(@PathVariable Long userId){
+        return userFacade.getById(userId);
+    }
+
+    @PutMapping("/{userId}")
+    public UserGetDto update(@PathVariable Long userId, @RequestBody UserUpdateDto body){
+        return userFacade.update(userId, body);
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> delete(@PathVariable Long userId){
+        userFacade.deleteById(userId);
+
+        return ResponseEntity.noContent()
+                .build();
     }
 
 }

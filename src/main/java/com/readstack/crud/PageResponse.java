@@ -1,5 +1,7 @@
 package com.readstack.crud;
 
+import org.springframework.data.domain.Page;
+
 import java.util.List;
 
 public record PageResponse<T>(
@@ -9,6 +11,15 @@ public record PageResponse<T>(
         int totalPages,
         Long totalElements
 ) {
+    public PageResponse(Page<T> page) {
+        this(
+                page.getContent(),
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalPages(),
+                page.getTotalElements()
+        );
+    }
 }
 
 //class User {

@@ -1,6 +1,6 @@
 package com.readstack.controller;
 
-import com.readstack.crud.DiscoveryFacade;
+import com.readstack.crud.discovery.DiscoveryFacade;
 import com.readstack.crud.PageResponse;
 import com.readstack.dto.DiscoveryAddDto;
 import com.readstack.dto.DiscoveryGetDto;

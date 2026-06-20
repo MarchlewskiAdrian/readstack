@@ -2,7 +2,7 @@ package com.readstack.security.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.readstack.user_crud.SecurityUser;
+import com.readstack.security.SecurityUser;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

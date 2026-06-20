@@ -1,7 +1,7 @@
 package com.readstack.security;
 
 import com.readstack.security.jwt.JWTAuthTokenFilter;
-import com.readstack.user_crud.UserRepository;
+import com.readstack.crud.user.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -74,6 +74,12 @@ class SecurityConfig {
                         .requestMatchers(POST, "/categories/**").hasRole("ADMIN")
                         .requestMatchers(PUT, "/categories/**").hasRole("ADMIN")
                         .requestMatchers(DELETE, "/categories/**").hasRole("ADMIN")
+
+                        .requestMatchers(GET, "/users/**").permitAll()
+                        .requestMatchers(PUT, "/users/**").hasRole("ADMIN")
+                        .requestMatchers(DELETE, "/users/**").hasRole("ADMIN")
+
+                        .requestMatchers(GET, "votes/**").permitAll()
                         .anyRequest().authenticated()
         );
         return http.build();

@@ -1,7 +1,7 @@
 package com.readstack.configuration;
 
-import com.readstack.user_crud.SecurityUser;
-import com.readstack.user_crud.User;
+import com.readstack.security.SecurityUser;
+import com.readstack.crud.user.User;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;

@@ -1,10 +1,13 @@
 package com.readstack.crud.vote;
 
 import com.readstack.crud.PageResponse;
+import com.readstack.crud.vote.search.VoteFilter;
+import com.readstack.crud.vote.search.VoteSpecificationsBuilder;
 import com.readstack.dto.VoteGetDto;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,39 +16,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 class VoteFetcher {
     private final VoteRepository voteRepository;
+    private final VoteSpecificationsBuilder builder;
 
     public boolean existsByUserId(Long creator) {
-        return voteRepository.existsByAudit_creator(creator);
+        return voteRepository.existsByAudit_Creator(creator);
     }
 
-    public PageResponse<VoteGetDto> getAll(Long discoveryId, Long userId, Pageable pageable) {
-        Page<Vote> votes;
+    public PageResponse<VoteGetDto> search(VoteFilter filter, Pageable pageable) {
+        Specification<Vote> spec = builder.build(filter);
+        Page<VoteGetDto> page = voteRepository.findAll(spec, pageable)
+                .map(VoteMapper::mapEntityToGetDto);
 
-        if (discoveryId != null && userId != null) {
-            votes = voteRepository.findAllByUser_IdAndDiscovery_Id(userId, discoveryId, pageable);
-        }
-        else if (discoveryId != null){
-            votes = voteRepository.findAllByDiscovery_Id(discoveryId, pageable);
-        }
-        else if (userId != null){
-            votes = voteRepository.findAllByUser_Id(userId, pageable);
-        }
-        else {
-            votes = voteRepository.findAll(pageable);
-        }
-
-        Page<VoteGetDto> votesDto = votes.map(VoteMapper::mapEntityToGetDto);
-
-        return toPageResponse(votesDto);
+        return new PageResponse<>(page);
     }
 
-    public static PageResponse<VoteGetDto> toPageResponse(Page<VoteGetDto> page) { //TODO: Util method
-        return new PageResponse<>(
-                page.getContent(),
-                page.getNumber(),
-                page.getSize(),
-                page.getTotalPages(),
-                page.getTotalElements()
-        );
-    }
 }

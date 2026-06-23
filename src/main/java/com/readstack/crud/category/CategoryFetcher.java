@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-public class CategoryFetcher {
+class CategoryFetcher {
     private final CategoryRepository categoryRepository;
 
     public PageResponse<CategoryGetDto> getAll(Pageable pageable) {

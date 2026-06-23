@@ -4,6 +4,7 @@ import com.readstack.crud.category.CategoryFacade;
 import com.readstack.crud.PageResponse;
 import com.readstack.dto.CategoryAddDto;
 import com.readstack.dto.CategoryGetDto;
+import com.readstack.dto.DiscoveryGetDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -35,6 +36,17 @@ class CategoryController {
     @GetMapping("/{categoryId}")
     public CategoryGetDto getById(@PathVariable Long categoryId) {
         return categoryFacade.getById(categoryId);
+    }
+
+    @GetMapping("/{categoryId}/discoveries")
+    public  PageResponse<DiscoveryGetDto> getDiscoveriesByCategoryId(@PathVariable Long categoryId,
+                                                                     @RequestParam(required = false, defaultValue = "0") Integer page,
+                                                                     @RequestParam(required = false, defaultValue = "20") Integer size,
+                                                                     @RequestParam(required = false, defaultValue = "id") String field,
+                                                                     @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction){
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, field));
+
+        return categoryFacade.getDiscoveriesByCategoryId(categoryId, pageable);
     }
 
     @PutMapping("/{categoryId}")

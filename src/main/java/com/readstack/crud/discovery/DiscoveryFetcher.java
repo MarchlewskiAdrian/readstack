@@ -2,6 +2,8 @@ package com.readstack.crud.discovery;
 
 import com.readstack.crud.category.CategoryMapper;
 import com.readstack.crud.PageResponse;
+import com.readstack.crud.discovery.search.DiscoveryFilter;
+import com.readstack.crud.discovery.search.DiscoverySpecificationsBuilder;
 import com.readstack.dto.CategoryNameDto;
 import com.readstack.dto.DiscoveryGetDto;
 import com.readstack.validation.exception.DiscoveryNotFoundException;
@@ -9,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,22 +20,25 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class DiscoveryFetcher {
     private final DiscoveryRepository discoveryRepository;
+    private final DiscoverySpecificationsBuilder specificationsBuilder;
 
-    public PageResponse<DiscoveryGetDto> getAll(String title, Pageable pageable) {
-        Page<DiscoveryGetDto> page = discoveryRepository.findAllWitOptionalTitleField(title, pageable)
+
+    public PageResponse<DiscoveryGetDto> search(DiscoveryFilter filter, Pageable pageable) {
+        Specification<Discovery> spec = specificationsBuilder.build(filter);
+        Page<DiscoveryGetDto> page = discoveryRepository.findAll(spec, pageable)
                 .map(this::toGetDto);
 
-        return toPageResponse(page);
+        return new PageResponse<>(page);
     }
 
     public PageResponse<DiscoveryGetDto> getAllByCategoryId(Long categoryId, Pageable pageable) {
         Page<DiscoveryGetDto> page = discoveryRepository.findAllByCategory_Id(categoryId, pageable)
                 .map(this::toGetDto);
 
-        return toPageResponse(page);
+        return new PageResponse<>(page);
     }
 
-    public boolean existsByCategoryId(Long categoryId){
+    public boolean existsByCategoryId(Long categoryId) {
         return discoveryRepository.existsByCategory_Id(categoryId);
     }
 
@@ -45,7 +51,8 @@ class DiscoveryFetcher {
                 .map(this::toGetDto)
                 .orElseThrow(() -> new DiscoveryNotFoundException(id));
     }
-    public Discovery getEntityById(Long id){
+
+    public Discovery getEntityById(Long id) {
         return discoveryRepository.findById(id)
                 .orElseThrow(() -> new DiscoveryNotFoundException(id));
     }
@@ -55,15 +62,6 @@ class DiscoveryFetcher {
         return DiscoveryMapper.mapEntityToGetDto(discovery, categoryNameDto);
     }
 
-    private PageResponse<DiscoveryGetDto> toPageResponse(Page<DiscoveryGetDto> page) { //TODO: Util method
-        return new PageResponse<>(
-                page.getContent(),
-                page.getNumber(),
-                page.getSize(),
-                page.getTotalPages(),
-                page.getTotalElements()
-        );
-    }
 }
 
 

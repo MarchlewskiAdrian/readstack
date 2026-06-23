@@ -1,6 +1,7 @@
 package com.readstack.crud.discovery;
 
 import com.readstack.crud.PageResponse;
+import com.readstack.crud.discovery.search.DiscoveryFilter;
 import com.readstack.dto.DiscoveryAddDto;
 import com.readstack.dto.DiscoveryGetDto;
 import lombok.RequiredArgsConstructor;
@@ -9,15 +10,18 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+
 public class DiscoveryFacade {
     private final DiscoveryFetcher discoveryFetcher;
     private final DiscoveryAdder discoveryAdder;
     private final DiscoveryUpdater discoveryUpdater;
     private final DiscoveryDeleter discoveryDeleter;
 
-    public PageResponse<DiscoveryGetDto> getAll(String title, Pageable pageable){
-        return discoveryFetcher.getAll(title, pageable);
+
+    public PageResponse<DiscoveryGetDto> search(DiscoveryFilter filter, Pageable pageable){
+        return discoveryFetcher.search(filter, pageable);
     }
+
     public PageResponse<DiscoveryGetDto> getAllByCategoryId(Long categoryId, Pageable pageable){
         return discoveryFetcher.getAllByCategoryId(categoryId, pageable);
     }

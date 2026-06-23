@@ -2,20 +2,17 @@ package com.readstack.crud.discovery;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-interface DiscoveryRepository extends JpaRepository<Discovery, Long> {
+interface DiscoveryRepository extends JpaRepository<Discovery, Long>, JpaSpecificationExecutor<Discovery> {
 
     boolean existsByTitleIgnoreCaseAndIdNot(String title, Long id);
 
     @EntityGraph(attributePaths = "category")
-    @Query("""
-            SELECT d FROM Discovery d
-            WHERE (LOWER(d.title) LIKE LOWER(CONCAT('%', :title, '%')) OR :title IS NULL)
-            """)
-    Page<Discovery> findAllWitOptionalTitleField(String title, Pageable pageable);
+    Page<Discovery> findAll(Specification<Discovery> spec, Pageable pageable);
 
     boolean existsByTitleIgnoreCase(String title);
 

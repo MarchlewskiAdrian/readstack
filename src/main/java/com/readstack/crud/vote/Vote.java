@@ -11,7 +11,14 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "votes")
-class Vote extends BaseEntity {
+@NamedEntityGraph(
+        name = "Vote.userAndDiscovery",
+        attributeNodes = {
+                @NamedAttributeNode("user"),
+                @NamedAttributeNode("discovery")
+        }
+)
+public class Vote extends BaseEntity {
     @ManyToOne
     private User user;
     @ManyToOne

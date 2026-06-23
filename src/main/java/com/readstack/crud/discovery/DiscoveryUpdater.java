@@ -1,7 +1,7 @@
 package com.readstack.crud.discovery;
 
 import com.readstack.crud.category.Category;
-import com.readstack.crud.category.CategoryFetcher;
+import com.readstack.crud.category.CategoryFacade;
 import com.readstack.crud.category.CategoryMapper;
 import com.readstack.dto.CategoryNameDto;
 import com.readstack.dto.DiscoveryAddDto;
@@ -18,8 +18,9 @@ class DiscoveryUpdater {
 
     private final DiscoveryFetcher discoveryFetcher;
     private final DiscoveryRepository discoveryRepository;
-    private final CategoryFetcher categoryFetcher;
     private final DiscoveryValidator discoveryValidator;
+
+    private final CategoryFacade categoryFetcher;
 
     public DiscoveryGetDto updateById(Long id, DiscoveryAddDto dto) {
 

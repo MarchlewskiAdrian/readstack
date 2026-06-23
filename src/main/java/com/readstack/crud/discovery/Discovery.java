@@ -26,6 +26,12 @@ public class Discovery extends BaseEntity {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    private Integer voteCount;
+
+    public void addVote(){
+        voteCount++;
+    }
+
 }
 
 // Relacja ManyToOne / OneToMany:

@@ -2,6 +2,7 @@ package com.readstack.validation;
 
 import com.readstack.validation.exception.ApiException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,17 +14,6 @@ import java.util.List;
 
 @RestControllerAdvice
 public class ErrorHandler {
-
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ErrorResponse> handleBadCredentialsException(Exception e){
-        return ResponseEntity
-                .status(ErrorCode.VALIDATION_ERROR.getStatus())
-                .body(new ErrorResponse(
-                        ErrorCode.VALIDATION_ERROR.getCode(),
-                        "Bad Credentials",
-                        null,
-                        Instant.now()));
-    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
@@ -50,6 +40,28 @@ public class ErrorHandler {
                         null,
                         Instant.now()
                 ));
+    }
+    @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
+    public ResponseEntity<ErrorResponse> handleOptimisticLockingException(ObjectOptimisticLockingFailureException e){
+        return ResponseEntity
+                .status(ErrorCode.RESOURCE_MODIFIED.getStatus())
+                .body(new ErrorResponse(
+                        ErrorCode.RESOURCE_MODIFIED.getCode(),
+                        "Resource modified by other user",
+                        null,
+                        Instant.now()
+                ));
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException e){
+        return ResponseEntity
+                .status(ErrorCode.VALIDATION_ERROR.getStatus())
+                .body(new ErrorResponse(
+                        ErrorCode.VALIDATION_ERROR.getCode(),
+                        "Bad Credentials",
+                        null,
+                        Instant.now()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -1,6 +1,7 @@
 package com.readstack.crud.vote;
 
 import com.readstack.crud.PageResponse;
+import com.readstack.crud.vote.search.VoteFilter;
 import com.readstack.dto.VoteAddDto;
 import com.readstack.dto.VoteGetDto;
 import com.readstack.security.SecurityUser;
@@ -18,8 +19,8 @@ public class VoteFacade {
         return voteAdder.add(dto, user);
     }
 
-    public PageResponse<VoteGetDto> getAll(Long discoveryId, Long userId, Pageable pageable) {
-        return voteFetcher.getAll(discoveryId, userId, pageable);
+    public PageResponse<VoteGetDto> search(VoteFilter filter, Pageable pageable) {
+        return voteFetcher.search(filter, pageable);
     }
 
     public boolean hasUserVotes(Long userId) {

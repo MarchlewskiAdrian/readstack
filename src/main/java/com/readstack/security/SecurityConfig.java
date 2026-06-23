@@ -79,7 +79,7 @@ class SecurityConfig {
                         .requestMatchers(PUT, "/users/**").hasRole("ADMIN")
                         .requestMatchers(DELETE, "/users/**").hasRole("ADMIN")
 
-                        .requestMatchers(GET, "votes/**").permitAll()
+                        .requestMatchers(GET, "/votes/**").permitAll()
                         .anyRequest().authenticated()
         );
         return http.build();

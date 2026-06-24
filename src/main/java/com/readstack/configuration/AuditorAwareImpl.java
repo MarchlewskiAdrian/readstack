@@ -1,10 +1,8 @@
 package com.readstack.configuration;
 
 import com.readstack.security.SecurityUser;
-import com.readstack.crud.user.User;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;
@@ -14,13 +12,37 @@ class AuditorAwareImpl implements AuditorAware<Long> {
 
     @Override
     public Optional<Long> getCurrentAuditor() {
-       return Optional.ofNullable(SecurityContextHolder.getContext())
-               .map(SecurityContext::getAuthentication)
-               .filter(Authentication::isAuthenticated)
-               .map(Authentication::getPrincipal)
-               .map(SecurityUser.class::cast)
-               .map(SecurityUser::getUser)
-               .map(User::getId);
+
+        Authentication auth =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        System.out.println(auth.getClass());
+        System.out.println(auth.isAuthenticated());
+        System.out.println(auth.getPrincipal());
+        System.out.println(auth.getPrincipal().getClass());
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()){
+            return Optional.empty();
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof SecurityUser securityUser)){
+            return Optional.empty();
+        }
+        return Optional.ofNullable(securityUser.getUser().getId());
 
     }
 }
+
+
+//@Override
+//public Optional<Long> getCurrentAuditor() {
+//    return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
+//            .filter(Authentication::isAuthenticated)
+//            .map(Authentication::getPrincipal)
+//            .filter(SecurityUser.class::isInstance)
+//            .map(SecurityUser.class::cast)
+//            .map(SecurityUser::getUser)
+//            .map(User::getId);
+//}

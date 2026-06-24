@@ -1,8 +1,8 @@
 package com.readstack.crud.discovery;
 
 import com.readstack.crud.category.Category;
-import com.readstack.crud.category.CategoryFacade;
 import com.readstack.crud.category.CategoryMapper;
+import com.readstack.crud.category.CategoryLookup;
 import com.readstack.dto.CategoryNameDto;
 import com.readstack.dto.DiscoveryAddDto;
 import com.readstack.dto.DiscoveryGetDto;
@@ -20,15 +20,15 @@ class DiscoveryUpdater {
     private final DiscoveryRepository discoveryRepository;
     private final DiscoveryValidator discoveryValidator;
 
-    private final CategoryFacade categoryFetcher;
+    private final CategoryLookup retriever;
 
     public DiscoveryGetDto updateById(Long id, DiscoveryAddDto dto) {
 
         discoveryValidator.validateForUpdate(id, dto);
 
         Discovery discovery = discoveryFetcher.getEntityById(id);
-        Category category = categoryFetcher.getEntityById(dto.categoryId());
-        CategoryNameDto categoryNameDto = CategoryMapper.mapEntityToNameDto(category); //TODO: Don't import CategoryMaper, add facade method getCategoryName
+        Category category = retriever.getEntityById(dto.categoryId());
+        CategoryNameDto categoryNameDto = CategoryMapper.mapEntityToNameDto(category);
 
         discovery.setTitle(dto.title());
         discovery.setUrl(dto.url());

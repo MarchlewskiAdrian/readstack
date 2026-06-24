@@ -1,8 +1,8 @@
 package com.readstack.crud.discovery;
 
 import com.readstack.crud.category.Category;
-import com.readstack.crud.category.CategoryFacade;
 import com.readstack.crud.category.CategoryMapper;
+import com.readstack.crud.category.CategoryLookup;
 import com.readstack.dto.CategoryNameDto;
 import com.readstack.dto.DiscoveryAddDto;
 import com.readstack.dto.DiscoveryGetDto;
@@ -18,12 +18,12 @@ class DiscoveryAdder {
     private final DiscoveryRepository discoveryRepository;
     private final DiscoveryValidator discoveryValidator;
 
-    private final CategoryFacade categoryFacade;
+    private final CategoryLookup retriever;
 
     public DiscoveryGetDto add(DiscoveryAddDto dto) {
         discoveryValidator.validateForAdd(dto);
 
-        Category category = categoryFacade.getEntityById(dto.categoryId());
+        Category category = retriever.getEntityById(dto.categoryId());
         Discovery discoveryToAdd = DiscoveryMapper.mapAddDtoToEntity(dto, category);
 
         Discovery savedDiscovery = discoveryRepository.save(discoveryToAdd);

@@ -1,6 +1,6 @@
 package com.readstack.crud.category;
 
-import com.readstack.crud.discovery.DiscoveryFacade;
+import com.readstack.crud.discovery.DiscoveryLookup;
 import com.readstack.validation.exception.CategoryContainsDiscoveriesException;
 import com.readstack.validation.exception.CategoryNotFoundException;
 import lombok.AccessLevel;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 class CategoryDeleter {
 
     private final CategoryRepository categoryRepository;
-    private final DiscoveryFacade discoveryFacade;
+    private final DiscoveryLookup lookup;
 
     public void deleteById(Long id) {
         if (containsDiscoveries(id)) {
@@ -27,7 +27,7 @@ class CategoryDeleter {
     }
 
     private boolean containsDiscoveries(Long id) {
-        return discoveryFacade.existsByCategoryId(id);
+        return lookup.existsByCategoryId(id);
 
     }
 }

@@ -62,7 +62,6 @@ class SecurityConfig {
                                 "/v3/api-docs/**")
                         .permitAll()
 
-                        .requestMatchers(POST, "/users/**").permitAll()
                         .requestMatchers(POST, "/token/**").permitAll()
 
                         .requestMatchers(GET, "/discoveries/**").permitAll()
@@ -76,6 +75,7 @@ class SecurityConfig {
                         .requestMatchers(DELETE, "/categories/**").hasRole("ADMIN")
 
                         .requestMatchers(GET, "/users/**").permitAll()
+                        .requestMatchers(POST, "/users/**").permitAll()
                         .requestMatchers(PUT, "/users/**").hasRole("ADMIN")
                         .requestMatchers(DELETE, "/users/**").hasRole("ADMIN")
 

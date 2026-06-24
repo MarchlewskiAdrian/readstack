@@ -20,6 +20,7 @@ class UserAdder {
 
     public UserGetDto add(UserAddDto dto) {
         //TODO: userValidatior.validateForAdd(dto);
+        System.out.println(dto);
 
         String encodedPassword = passwordEncoder.encode(dto.password());
 

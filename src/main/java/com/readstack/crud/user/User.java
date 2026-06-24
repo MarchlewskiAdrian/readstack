@@ -36,6 +36,14 @@ public class User extends BaseEntity {
         authorities.add(role);
     }
 
-
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", enabled=" + enabled +
+                ", authorities=" + authorities +
+                '}';
+    }
 }

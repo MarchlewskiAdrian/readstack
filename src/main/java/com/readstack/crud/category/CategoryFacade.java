@@ -1,7 +1,7 @@
 package com.readstack.crud.category;
 
 import com.readstack.crud.PageResponse;
-import com.readstack.crud.discovery.DiscoveryFacade;
+import com.readstack.crud.discovery.DiscoveryLookup;
 import com.readstack.dto.CategoryAddDto;
 import com.readstack.dto.CategoryGetDto;
 import com.readstack.dto.DiscoveryGetDto;
@@ -11,14 +11,17 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CategoryFacade {
-
+public class CategoryFacade{
     private final CategoryFetcher categoryFetcher;
     private final CategoryUpdater categoryUpdater;
     private final CategoryDeleter categoryDeleter;
     private final CategoryAdder categoryAdder;
 
-    private final DiscoveryFacade discoveryFacade;
+    private final DiscoveryLookup lookup;
+
+    public Category getEntityById(Long categoryId) {
+        return categoryFetcher.getEntityById(categoryId);
+    }
 
     public PageResponse<CategoryGetDto> getAll(Pageable pageable) {
         return categoryFetcher.getAll(pageable);
@@ -28,8 +31,9 @@ public class CategoryFacade {
         return categoryFetcher.getById(id);
     }
 
+
     public PageResponse<DiscoveryGetDto> getDiscoveriesByCategoryId(Long categoryId, Pageable pageable) {
-        return discoveryFacade.getAllByCategoryId(categoryId, pageable);
+        return lookup.getAllByCategoryId(categoryId, pageable);
     }
 
     public CategoryGetDto updateById(Long id, CategoryAddDto body){
@@ -42,9 +46,5 @@ public class CategoryFacade {
 
     public CategoryGetDto add(CategoryAddDto body) {
         return categoryAdder.add(body);
-    }
-
-    public Category getEntityById(Long categoryId) {
-        return categoryFetcher.getEntityById(categoryId);
     }
 }

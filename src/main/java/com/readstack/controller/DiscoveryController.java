@@ -5,11 +5,13 @@ import com.readstack.crud.discovery.DiscoveryFacade;
 import com.readstack.crud.discovery.search.DiscoveryFilter;
 import com.readstack.dto.DiscoveryAddDto;
 import com.readstack.dto.DiscoveryGetDto;
+import com.readstack.security.SecurityUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -54,14 +56,16 @@ class DiscoveryController {
     @PutMapping("/{discoveryId}")
     DiscoveryGetDto update(
             @PathVariable Long discoveryId,
-            @Valid @RequestBody DiscoveryAddDto body
+            @Valid @RequestBody DiscoveryAddDto body,
+            @AuthenticationPrincipal SecurityUser securityUser
     ) {
-        return discoveryFacade.updateById(discoveryId, body);
+        return discoveryFacade.updateById(discoveryId, body, securityUser);
     }
 
     @DeleteMapping("/{discoveryId}")
-    ResponseEntity<Void> deleteById(@PathVariable Long discoveryId) {
-        discoveryFacade.deleteById(discoveryId);
+    ResponseEntity<Void> deleteById(@PathVariable Long discoveryId,
+                                    @AuthenticationPrincipal SecurityUser securityUser) {
+        discoveryFacade.deleteById(discoveryId, securityUser);
 
         return ResponseEntity.noContent().build();
     }

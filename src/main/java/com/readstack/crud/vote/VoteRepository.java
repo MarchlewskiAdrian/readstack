@@ -14,4 +14,6 @@ interface VoteRepository extends JpaRepository<Vote, Long>, JpaSpecificationExec
     Page<Vote> findAll(Specification specification,Pageable pageable);
 
     boolean existsByAudit_Creator(Long creator);
+
+    boolean existsByUserIdAndDiscoveryId(Long userId, Long id);
 }

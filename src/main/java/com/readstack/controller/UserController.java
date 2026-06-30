@@ -5,11 +5,13 @@ import com.readstack.crud.user.UserFacade;
 import com.readstack.dto.UserAddDto;
 import com.readstack.dto.UserGetDto;
 import com.readstack.dto.UserUpdateDto;
+import com.readstack.security.SecurityUser;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -50,8 +52,10 @@ class UserController {
     }
 
     @PutMapping("/{userId}")
-    public UserGetDto update(@PathVariable Long userId, @RequestBody UserUpdateDto body){
-        return userFacade.update(userId, body);
+    public UserGetDto update(@PathVariable Long userId,
+                             @RequestBody UserUpdateDto body,
+                             @AuthenticationPrincipal SecurityUser securityUser){
+        return userFacade.update(userId, body, securityUser);
     }
 
     @DeleteMapping("/{userId}")

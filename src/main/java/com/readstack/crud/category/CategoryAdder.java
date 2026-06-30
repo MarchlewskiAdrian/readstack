@@ -2,22 +2,21 @@ package com.readstack.crud.category;
 
 import com.readstack.dto.CategoryAddDto;
 import com.readstack.dto.CategoryGetDto;
-import com.readstack.validation.exception.CategoryExistsException;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 class CategoryAdder {
     private final CategoryRepository categoryRepository;
+    private final CategoryDataValidator categoryDataValidator;
 
     public CategoryGetDto add(CategoryAddDto dto) {
-        if(categoryRepository.existsByNameIgnoreCase(dto.name())){
-            throw new CategoryExistsException(dto.name());
-        }
+
+        categoryDataValidator.requireUniqueName(dto.name());
 
         Category category = CategoryMapper.mapAddDtoToEntity(dto);
         Category savedCategory = categoryRepository.save(category);

@@ -1,33 +1,45 @@
 package com.readstack.crud.discovery;
 
+import com.readstack.crud.ResourceType;
 import com.readstack.crud.category.Category;
-import com.readstack.crud.category.CategoryMapper;
 import com.readstack.crud.category.CategoryLookup;
+import com.readstack.crud.category.CategoryMapper;
+import com.readstack.crud.user.User;
 import com.readstack.dto.CategoryNameDto;
 import com.readstack.dto.DiscoveryAddDto;
 import com.readstack.dto.DiscoveryGetDto;
+import com.readstack.security.SecurityUser;
+import com.readstack.validation.ResourceBusinessValidator;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 class DiscoveryUpdater {
-
     private final DiscoveryFetcher discoveryFetcher;
     private final DiscoveryRepository discoveryRepository;
-    private final DiscoveryValidator discoveryValidator;
+    private final DiscoveryDataValidator discoveryDataValidator;
+    private final ResourceBusinessValidator resourceBusinessValidator;
+    private final CategoryLookup categoryLookup;
 
-    private final CategoryLookup retriever;
+    public DiscoveryGetDto updateById(Long discoveryId,
+                                      DiscoveryAddDto dto,
+                                      SecurityUser securityUser) {
 
-    public DiscoveryGetDto updateById(Long id, DiscoveryAddDto dto) {
+        Discovery discovery = discoveryFetcher.getEntityById(discoveryId);
+        Category category = categoryLookup.getEntityById(dto.categoryId());
 
-        discoveryValidator.validateForUpdate(id, dto);
+        User user = securityUser.getUser();
+        Long creatorId = discovery.getAudit()
+                .getCreator();
 
-        Discovery discovery = discoveryFetcher.getEntityById(id);
-        Category category = retriever.getEntityById(dto.categoryId());
+        resourceBusinessValidator.requireResourceOwnerOrAdmin(user, creatorId, ResourceType.DISCOVERY);
+        discoveryDataValidator.requireUniqueTitle(discoveryId, dto.title());
+        discoveryDataValidator.requireUniqueUrl(discoveryId, dto.url());
+
         CategoryNameDto categoryNameDto = CategoryMapper.mapEntityToNameDto(category);
 
         discovery.setTitle(dto.title());

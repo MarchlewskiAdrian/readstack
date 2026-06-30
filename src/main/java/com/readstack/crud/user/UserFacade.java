@@ -4,6 +4,7 @@ import com.readstack.crud.PageResponse;
 import com.readstack.dto.UserAddDto;
 import com.readstack.dto.UserGetDto;
 import com.readstack.dto.UserUpdateDto;
+import com.readstack.security.SecurityUser;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -29,8 +30,8 @@ public class UserFacade {
         return userFetcher.getAll(pageable);
     }
 
-    public UserGetDto update(Long userId, UserUpdateDto body) {
-        return userUpdater.update(userId, body);
+    public UserGetDto update(Long userId, UserUpdateDto body, SecurityUser securityUser) {
+        return userUpdater.update(userId, body, securityUser);
     }
 
     public void deleteById(Long userId) {

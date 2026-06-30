@@ -1,12 +1,13 @@
 package com.readstack.crud.discovery;
 
-import com.readstack.crud.category.CategoryMapper;
 import com.readstack.crud.PageResponse;
+import com.readstack.crud.ResourceType;
+import com.readstack.crud.category.CategoryMapper;
 import com.readstack.crud.discovery.search.DiscoveryFilter;
 import com.readstack.crud.discovery.search.DiscoverySpecificationsBuilder;
 import com.readstack.dto.CategoryNameDto;
 import com.readstack.dto.DiscoveryGetDto;
-import com.readstack.validation.exception.DiscoveryNotFoundException;
+import com.readstack.validation.exception.ResourceNotFoundException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -46,15 +47,15 @@ class DiscoveryFetcher {
         return discoveryRepository.existsByAudit_creator(userId);
     }
 
-    public DiscoveryGetDto getById(Long id) {
-        return discoveryRepository.findById(id)
+    public DiscoveryGetDto getById(Long discoveryId) {
+        return discoveryRepository.findById(discoveryId)
                 .map(this::toGetDto)
-                .orElseThrow(() -> new DiscoveryNotFoundException(id));
+                .orElseThrow(() -> new ResourceNotFoundException(discoveryId, ResourceType.DISCOVERY));
     }
 
-    public Discovery getEntityById(Long id) {
-        return discoveryRepository.findById(id)
-                .orElseThrow(() -> new DiscoveryNotFoundException(id));
+    public Discovery getEntityById(Long discoveryId) {
+        return discoveryRepository.findById(discoveryId)
+                .orElseThrow(() -> new ResourceNotFoundException(discoveryId, ResourceType.DISCOVERY));
     }
 
     private DiscoveryGetDto toGetDto(Discovery discovery) {

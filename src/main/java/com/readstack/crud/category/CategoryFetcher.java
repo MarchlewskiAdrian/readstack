@@ -1,8 +1,9 @@
 package com.readstack.crud.category;
 
 import com.readstack.crud.PageResponse;
+import com.readstack.crud.ResourceType;
 import com.readstack.dto.CategoryGetDto;
-import com.readstack.validation.exception.CategoryNotFoundException;
+import com.readstack.validation.exception.ResourceNotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,14 +32,14 @@ class CategoryFetcher {
 
     }
 
-    public CategoryGetDto getById(Long id) {
-        return categoryRepository.findById(id)
+    public CategoryGetDto getById(Long categoryId) {
+        return categoryRepository.findById(categoryId)
                 .map(CategoryMapper::mapEntityToGetDto)
-                .orElseThrow(() -> new CategoryNotFoundException(id));
+                .orElseThrow(() -> new ResourceNotFoundException(categoryId, ResourceType.CATEGORY));
     }
-    public Category getEntityById(Long id) {
-        return categoryRepository.findById(id)
-                .orElseThrow(() -> new CategoryNotFoundException(id));
+    public Category getEntityById(Long categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException(categoryId, ResourceType.CATEGORY));
     }
 
 }

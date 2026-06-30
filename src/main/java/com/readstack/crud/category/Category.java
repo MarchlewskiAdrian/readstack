@@ -16,6 +16,4 @@ public class Category extends BaseEntity {
     @Column(nullable = false)
     private String description;
 
-//    @OneToMany(mappedBy = "category") //TODO: NOT USED
-//    private List<Discovery> discoveries;
 }

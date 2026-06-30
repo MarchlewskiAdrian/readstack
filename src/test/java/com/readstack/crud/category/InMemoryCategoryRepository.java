@@ -1,6 +1,7 @@
 package com.readstack.crud.category;
 
-import com.readstack.validation.exception.CategoryNotFoundException;
+import com.readstack.crud.ResourceType;
+import com.readstack.validation.exception.ResourceNotFoundException;
 import org.springframework.data.domain.*;
 import org.springframework.data.repository.query.FluentQuery;
 
@@ -50,22 +51,22 @@ public class InMemoryCategoryRepository implements CategoryRepository {
     }
 
     @Override
-    public Optional<Category> findById(Long id) {
-        return Optional.ofNullable(db.get(id));
+    public Optional<Category> findById(Long categoryId) {
+        return Optional.ofNullable(db.get(categoryId));
     }
 
     @Override
-    public void deleteById(Long id) {
-        if (!db.containsKey(id)){
-            throw new CategoryNotFoundException(id);
+    public void deleteById(Long categoryId) {
+        if (!db.containsKey(categoryId)){
+            throw new ResourceNotFoundException(categoryId, ResourceType.CATEGORY);
         }
-        db.remove(id);
+        db.remove(categoryId);
 
     }
 
     @Override
-    public boolean existsById(Long id) {
-        return db.containsKey(id);
+    public boolean existsById(Long categoryId) {
+        return db.containsKey(categoryId);
     }
 
     @Override

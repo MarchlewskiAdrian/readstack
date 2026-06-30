@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CategoryFacade{
+public class CategoryFacade {
     private final CategoryFetcher categoryFetcher;
     private final CategoryUpdater categoryUpdater;
     private final CategoryDeleter categoryDeleter;
@@ -36,11 +36,11 @@ public class CategoryFacade{
         return lookup.getAllByCategoryId(categoryId, pageable);
     }
 
-    public CategoryGetDto updateById(Long id, CategoryAddDto body){
+    public CategoryGetDto updateById(Long id, CategoryAddDto body) {
         return categoryUpdater.updateById(id, body);
     }
 
-    public void deleteById(Long id){
+    public void deleteById(Long id) {
         categoryDeleter.deleteById(id);
     }
 

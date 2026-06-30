@@ -8,4 +8,8 @@ public interface DiscoveryLookup {
     boolean existsByCategoryId(Long categoryId);
 
     PageResponse<DiscoveryGetDto> getAllByCategoryId(Long categoryId, Pageable pageable);
+
+    boolean hasUserDiscoveries(Long userId);
+
+    Discovery getEntityById(Long discoveryId);
 }

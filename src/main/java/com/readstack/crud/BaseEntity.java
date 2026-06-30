@@ -17,13 +17,11 @@ public abstract class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private UUID uuid = UUID.randomUUID();
 
     @Embedded
     private Audit audit = new Audit();
-
-//    @CreationTimestamp
-//    private Instant createdOn; //TODO: Moved to Audit class
 
     @Version
     private Long version;
@@ -31,14 +29,12 @@ public abstract class BaseEntity {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof BaseEntity that)) return false;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(uuid, that.uuid) &&
-                Objects.equals(version, that.version);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, uuid, version);
+        return Objects.hashCode(id);
     }
 }
 

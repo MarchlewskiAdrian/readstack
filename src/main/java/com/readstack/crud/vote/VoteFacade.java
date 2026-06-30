@@ -5,12 +5,12 @@ import com.readstack.crud.vote.search.VoteFilter;
 import com.readstack.dto.VoteAddDto;
 import com.readstack.dto.VoteGetDto;
 import com.readstack.security.SecurityUser;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-@AllArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class VoteFacade {
     private final VoteAdder voteAdder;
     private final VoteFetcher voteFetcher;
@@ -23,7 +23,4 @@ public class VoteFacade {
         return voteFetcher.search(filter, pageable);
     }
 
-    public boolean hasUserVotes(Long userId) {
-        return voteFetcher.existsByUserId(userId);
-    }
 }

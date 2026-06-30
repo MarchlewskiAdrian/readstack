@@ -1,6 +1,7 @@
 package com.readstack.crud.discovery;
 
-import com.readstack.validation.exception.DiscoveryNotFoundException;
+import com.readstack.crud.ResourceType;
+import com.readstack.validation.exception.ResourceNotFoundException;
 import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
@@ -221,13 +222,13 @@ public class InMemoryDiscoveryRepository implements DiscoveryRepository {
     }
 
     @Override
-    public Optional<Discovery> findById(Long id) {
-        return Optional.ofNullable(db.get(id));
+    public Optional<Discovery> findById(Long discoveryId) {
+        return Optional.ofNullable(db.get(discoveryId));
     }
 
     @Override
-    public boolean existsById(Long id) {
-        return db.containsKey(id);
+    public boolean existsById(Long discoveryId) {
+        return db.containsKey(discoveryId);
     }
 
     @Override
@@ -246,11 +247,11 @@ public class InMemoryDiscoveryRepository implements DiscoveryRepository {
     }
 
     @Override
-    public void deleteById(Long id) {
-        if (!db.containsKey(id)) {
-            throw new DiscoveryNotFoundException(id);
+    public void deleteById(Long discoveryId) {
+        if (!db.containsKey(discoveryId)) {
+            throw new ResourceNotFoundException(discoveryId, ResourceType.DISCOVERY);
         }
-        db.remove(id);
+        db.remove(discoveryId);
     }
 
     @Override

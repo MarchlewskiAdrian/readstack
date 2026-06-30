@@ -9,25 +9,16 @@ import java.util.Optional;
 
 class AuditorAwareImpl implements AuditorAware<Long> {
 
-
     @Override
     public Optional<Long> getCurrentAuditor() {
 
-        Authentication auth =
-                SecurityContextHolder.getContext().getAuthentication();
-
-        System.out.println(auth.getClass());
-        System.out.println(auth.isAuthenticated());
-        System.out.println(auth.getPrincipal());
-        System.out.println(auth.getPrincipal().getClass());
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()){
+        if (authentication == null || !authentication.isAuthenticated()) {
             return Optional.empty();
         }
 
         Object principal = authentication.getPrincipal();
-        if (!(principal instanceof SecurityUser securityUser)){
+        if (!(principal instanceof SecurityUser securityUser)) {
             return Optional.empty();
         }
         return Optional.ofNullable(securityUser.getUser().getId());

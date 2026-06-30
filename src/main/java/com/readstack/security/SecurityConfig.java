@@ -1,12 +1,15 @@
 package com.readstack.security;
 
-import com.readstack.security.jwt.JWTAuthTokenFilter;
 import com.readstack.crud.user.UserRepository;
+import com.readstack.security.jwt.JWTAuthTokenFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,22 +17,30 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 class SecurityConfig {
-    public static final int KEY_SIZE = 2048;
-    public static final String RSA_ALGORITHM = "RSA";
+    private static final String USER = "USER";
+    public static final String ADMIN = "ADMIN";
+
+    @Value("${auth.jwt.public-key}")
+    Resource publicKey;
+
+    @Value("${auth.jwt.private-key}")
+    Resource privateKey;
 
     @Bean
-    KeyPair keyPair() throws NoSuchAlgorithmException {
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(RSA_ALGORITHM);
-        keyPairGenerator.initialize(KEY_SIZE);
-        return keyPairGenerator.generateKeyPair();
+    KeyPair keyPair() throws GeneralSecurityException, IOException {
+        RSAPublicKey rsaPublicKey = KeyReader.loadPublicKey(publicKey);
+        RSAPrivateKey rsaPrivateKey = KeyReader.loadPrivateKey(privateKey);
+        return new KeyPair(rsaPublicKey, rsaPrivateKey);
     }
 
     @Bean
@@ -49,9 +60,10 @@ class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http, JWTAuthTokenFilter jwtAuthTokenFilter) throws Exception {
-        http.csrf(c -> c.disable());
-        http.formLogin(c -> c.disable());
-        http.httpBasic(c -> c.disable());
+
+        http.csrf(AbstractHttpConfigurer::disable);
+        http.formLogin(AbstractHttpConfigurer::disable);
+        http.httpBasic(AbstractHttpConfigurer::disable);
         http.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.addFilterBefore(jwtAuthTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -65,21 +77,24 @@ class SecurityConfig {
                         .requestMatchers(POST, "/token/**").permitAll()
 
                         .requestMatchers(GET, "/discoveries/**").permitAll()
-                        .requestMatchers(POST, "/discoveries/**").hasRole("ADMIN")
-                        .requestMatchers(PUT, "/discoveries/**").hasRole("ADMIN")
-                        .requestMatchers(DELETE, "/discoveries/**").hasRole("ADMIN")
+                        .requestMatchers(POST, "/discoveries/**").hasAnyRole(ADMIN, USER)
+                        .requestMatchers(PUT, "/discoveries/**").hasAnyRole(ADMIN, USER)
+                        .requestMatchers(DELETE, "/discoveries/**").hasAnyRole(ADMIN, USER)
 
                         .requestMatchers(GET, "/categories/**").permitAll()
-                        .requestMatchers(POST, "/categories/**").hasRole("ADMIN")
-                        .requestMatchers(PUT, "/categories/**").hasRole("ADMIN")
-                        .requestMatchers(DELETE, "/categories/**").hasRole("ADMIN")
+                        .requestMatchers(POST, "/categories/**").hasRole(ADMIN)
+                        .requestMatchers(PUT, "/categories/**").hasRole(ADMIN)
+                        .requestMatchers(DELETE, "/categories/**").hasRole(ADMIN)
 
-                        .requestMatchers(GET, "/users/**").permitAll()
+                        .requestMatchers(GET, "/users/**").hasRole(ADMIN)
                         .requestMatchers(POST, "/users/**").permitAll()
-                        .requestMatchers(PUT, "/users/**").hasRole("ADMIN")
-                        .requestMatchers(DELETE, "/users/**").hasRole("ADMIN")
+                        .requestMatchers(PUT, "/users/**").hasAnyRole(ADMIN, USER)
+                        .requestMatchers(DELETE, "/users/**").hasRole(ADMIN)
 
                         .requestMatchers(GET, "/votes/**").permitAll()
+                        .requestMatchers(POST, "/votes/**").hasAnyRole(ADMIN, USER)
+                        .requestMatchers(PUT, "/votes/**").hasAnyRole(ADMIN, USER)
+                        .requestMatchers(DELETE, "/votes/**").hasAnyRole(ADMIN, USER)
                         .anyRequest().authenticated()
         );
         return http.build();

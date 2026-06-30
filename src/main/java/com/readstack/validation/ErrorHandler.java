@@ -1,9 +1,11 @@
 package com.readstack.validation;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.readstack.validation.exception.ApiException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -41,6 +43,33 @@ public class ErrorHandler {
                         Instant.now()
                 ));
     }
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUsernameNotFoundException(UsernameNotFoundException e) {
+
+        return ResponseEntity
+                .status(ErrorCode.RESOURCE_NOT_FOUND.getStatus())
+                .body(new ErrorResponse(
+                        ErrorCode.RESOURCE_NOT_FOUND.getCode(),
+                        e.getMessage(),
+                        null,
+                        Instant.now()
+                ));
+    }
+
+
+    @ExceptionHandler(TokenExpiredException.class)
+    public ResponseEntity<ErrorResponse> handleTokenExpiredException(TokenExpiredException e){
+        return ResponseEntity
+                .status(ErrorCode.FORBIDDEN.getStatus())
+                .body(new ErrorResponse(
+                        ErrorCode.FORBIDDEN.getCode(),
+                        e.getMessage(),
+                        null,
+                        Instant.now()
+                ));
+    }
+
+
     @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
     public ResponseEntity<ErrorResponse> handleOptimisticLockingException(ObjectOptimisticLockingFailureException e){
         return ResponseEntity
@@ -73,7 +102,6 @@ public class ErrorHandler {
                 .stream()
                 .map(this::mapToValidationError)
                 .toList();
-
 
         return ResponseEntity
                 .status(ErrorCode.VALIDATION_ERROR.getStatus())
